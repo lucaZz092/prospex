@@ -1,0 +1,18 @@
+# Termos de busca da Soft Solutions. {CIDADE} é trocado pelo script.
+# Perfil: empresas que tocam o dia a dia em planilhas/WhatsApp e ganham com sistema sob medida.
+clínicas médicas em {CIDADE}
+clínicas odontológicas em {CIDADE}
+clínicas de estética em {CIDADE}
+laboratórios de análises clínicas em {CIDADE}
+escritórios de contabilidade em {CIDADE}
+escritórios de advocacia em {CIDADE}
+transportadoras em {CIDADE}
+distribuidoras em {CIDADE}
+atacadistas em {CIDADE}
+indústrias em {CIDADE}
+construtoras em {CIDADE}
+imobiliárias em {CIDADE}
+oficinas mecânicas em {CIDADE}
+escolas de idiomas em {CIDADE}
+academias em {CIDADE}
+empresas de manutenção e instalação em {CIDADE}
