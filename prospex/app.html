@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prospex — Nova prospecção</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell" id="shell">
+  <main class="app-main">
+    <div class="app-top">
+      <a href="index.html" class="logo"><span class="logo-mark">P</span>Prospex</a>
+      <a href="index.html" class="btn btn-ghost" style="padding:9px 14px;font-size:13px">✕ Sair</a>
+    </div>
+    <div class="progress" id="progress"></div>
+    <div id="view"></div>
+  </main>
+
+  <aside class="summary" id="summary">
+    <h4>Seu pedido</h4>
+    <div class="sum-row"><span>Nicho</span><b id="sNicho">—</b></div>
+    <div class="sum-row"><span>Região</span><b id="sRegiao">—</b></div>
+    <div class="sum-row"><span>Extras</span><b id="sExtras">Nenhum</b></div>
+    <div class="estimate">
+      <small>Estimativa de leads</small>
+      <strong class="grad-text" id="sEst">0</strong>
+      <small id="sEstSub">escolha nicho e região</small>
+      <div class="meter"><i id="sMeter" style="width:0"></i></div>
+    </div>
+    <div class="total">
+      <small style="color:var(--muted)">Total · pagamento único</small>
+      <div class="v" id="sTotal">R$ 0</div>
+      <div class="secure">🔒 Pagamento seguro · Pix ou cartão em até 12x</div>
+    </div>
+  </aside>
+</div>
+<div class="toast" id="toast"></div>
+<canvas class="confetti" id="confetti"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="supa.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

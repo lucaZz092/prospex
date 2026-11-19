@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prospex — Minha área</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<div class="ws">
+  <aside class="side" id="side">
+    <a href="index.html" class="logo"><span class="logo-mark">P</span>Prospex</a>
+    <a href="app.html" class="btn btn-primary side-cta">＋ Nova prospecção</a>
+    <nav class="menu" id="menu">
+      <a href="#inicio" data-r="inicio">🏠 Início</a>
+      <a href="#prospeccoes" data-r="prospeccoes">📡 Minhas prospecções <span class="ct" id="ctOrders">4</span></a>
+      <a href="#leads" data-r="leads">📇 Leads</a>
+      <a href="#pipeline" data-r="pipeline">🧲 Pipeline</a>
+      <small>Abordagem</small>
+      <a href="#modelos" data-r="modelos">✉️ Modelos de e-mail</a>
+      <small>Conta</small>
+      <a href="#config" data-r="config">⚙️ Configurações</a>
+    </nav>
+    <div class="credits">
+      <small>Leads disponíveis</small>
+      <b class="grad-text" id="credLeads">0</b>
+      <div class="meter"><i style="width:62%"></i></div>
+    </div>
+    <div class="me" id="me"><div class="av" id="meAv">L</div><div><b id="meNome">Lucas</b><br><small id="meEmail"></small></div></div>
+  </aside>
+
+  <div class="ws-main">
+    <header class="topbar">
+      <button class="icon-btn burger" id="burger">☰</button>
+      <div class="search">🔎<input id="gsearch" placeholder="Buscar empresa, nicho ou cidade…"><span class="kbd">⌘K</span></div>
+      <span style="flex:1"></span>
+      <button class="icon-btn" id="bell" title="Notificações">🔔<span class="dot"></span></button>
+      <a href="login.html" class="icon-btn" id="logout" title="Sair">⎋</a>
+    </header>
+    <main id="page"></main>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer"></aside>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="supa.js"></script>
+<script src="workspace.js"></script>
+</body>
+</html>

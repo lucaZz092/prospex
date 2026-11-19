@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prospex — Entrar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<div class="auth">
+  <div class="auth-form">
+    <a href="index.html" class="logo"><span class="logo-mark">P</span>Prospex</a>
+    <div class="auth-box" id="box">
+      <h1 id="title">Bem-vindo de <span class="grad-text">volta</span>.</h1>
+      <p id="subtitle">Seus leads estão esperando por você.</p>
+
+      <div class="auth-tabs" id="tabs">
+        <div class="slider"></div>
+        <button class="on" data-mode="login">Entrar</button>
+        <button data-mode="signup">Criar conta</button>
+      </div>
+
+      <button class="social-btn" id="google">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+        Continuar com Google
+      </button>
+      <div class="divider">ou com e-mail</div>
+
+      <form id="form" novalidate>
+        <div class="field" id="fNome" hidden><label>Nome completo</label><input class="input" id="nome" placeholder="Como devemos te chamar?" autocomplete="name"></div>
+        <div class="field"><label>E-mail</label><input class="input" id="email" type="email" placeholder="voce@empresa.com.br" autocomplete="email"></div>
+        <div class="field"><label>Senha</label>
+          <div class="pw-wrap"><input class="input" id="senha" type="password" placeholder="••••••••" autocomplete="current-password"><button type="button" id="eye">Mostrar</button></div>
+          <div class="strength" id="strength" hidden><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="row-between" id="extras">
+          <label class="check"><input type="checkbox" checked> Manter conectado</label>
+          <a href="#" id="forgot">Esqueci a senha</a>
+        </div>
+        <div class="err" id="err"></div>
+        <button class="btn btn-primary btn-lg btn-block" id="submit" type="submit">Entrar na minha área →</button>
+      </form>
+      <p class="fine" id="fine">Ainda não comprou? <a href="app.html">Monte sua primeira prospecção</a></p>
+    </div>
+  </div>
+
+  <div class="auth-art">
+    <div class="grid-bg"></div>
+    <div class="orbit">
+      <div class="ring" style="--i:0%;--d:38s"><span>🩺</span></div>
+      <div class="ring" style="--i:12%;--d:28s"><span>⚖️</span></div>
+      <div class="ring" style="--i:24%;--d:20s"><span>🏠</span></div>
+      <div class="core">P</div>
+    </div>
+    <div class="quote">
+      <p id="qText">“Fechei 4 contratos na primeira semana só ligando para os leads de prioridade A. Paguei a lista no primeiro dia.”</p>
+      <div class="who" id="qWho"><span class="av">RM</span><span><b>Rafael M.</b> · Agência de marketing, Campinas</span></div>
+    </div>
+    <div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="supa.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+let mode = 'login';
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); };
+
+function setMode(m) {
+  mode = m;
+  $('#tabs').classList.toggle('signup', m === 'signup');
+  document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
+  const s = m === 'signup';
+  $('#fNome').hidden = !s; $('#strength').hidden = !s; $('#extras').hidden = s;
+  $('#title').innerHTML = s ? 'Crie sua <span class="grad-text">conta</span>.' : 'Bem-vindo de <span class="grad-text">volta</span>.';
+  $('#subtitle').textContent = s ? 'Leva 20 segundos. Sem cartão para criar a conta.' : 'Seus leads estão esperando por você.';
+  $('#submit').textContent = s ? 'Criar minha conta →' : 'Entrar na minha área →';
+  $('#senha').autocomplete = s ? 'new-password' : 'current-password';
+  $('#fine').innerHTML = s ? 'Ao criar a conta você aceita os <a href="#">Termos</a> e a <a href="#">Política de Privacidade</a>.' : 'Ainda não comprou? <a href="app.html">Monte sua primeira prospecção</a>';
+  $('#err').textContent = '';
+}
+document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+if (location.hash === '#signup') setMode('signup');
+
+$('#eye').onclick = () => { const i = $('#senha'); i.type = i.type === 'password' ? 'text' : 'password'; $('#eye').textContent = i.type === 'password' ? 'Mostrar' : 'Ocultar'; };
+$('#senha').oninput = e => {
+  const v = e.target.value; let s = 0;
+  if (v.length >= 8) s++; if (/[A-Z]/.test(v)) s++; if (/\d/.test(v)) s++; if (/[^\w]/.test(v)) s++;
+  const cols = ['#FF4FB8', '#FFB84F', '#33E1FF', '#C6FF3D'];
+  document.querySelectorAll('#strength i').forEach((i, k) => i.style.background = k < s ? cols[s - 1] : '');
+};
+$('#forgot').onclick = e => { e.preventDefault(); const em = $('#email').value; (/\S+@\S+\.\S+/.test(em) ? Prospex.esqueci(em).then(() => toast('Enviamos um link para ' + em), x => toast(x.message)) : toast('Digite seu e-mail acima primeiro')); };
+
+const destino = new URLSearchParams(location.search).get('next') === 'app' ? 'app.html#pagar' : 'workspace.html';
+const novaSenha = location.hash === '#nova-senha';
+if (!novaSenha) Prospex.user().then(u => { if (u) location.href = destino; });
+if (novaSenha) {
+  $('#title').innerHTML = 'Defina sua <span class="grad-text">nova senha</span>.'; $('#subtitle').textContent = 'Escolha uma senha com pelo menos 8 caracteres.';
+  ['#tabs', '#google', '.divider', '#extras', '#fine'].forEach(q => $(q).hidden = true);
+  $('#email').closest('.field').hidden = true; $('#strength').hidden = false; $('#submit').textContent = 'Salvar nova senha →';
+}
+$('#google').onclick = async () => { try { await Prospex.google(destino); } catch (e) { toast(e.message); } };
+
+$('#form').onsubmit = async e => {
+  e.preventDefault();
+  const email = $('#email').value.trim(), senha = $('#senha').value, nome = $('#nome').value.trim();
+  const fail = m => { $('#err').textContent = m; $('#box').classList.remove('shake'); void $('#box').offsetWidth; $('#box').classList.add('shake'); };
+  let err = '';
+  if (novaSenha) { if (senha.length < 8) err = 'A senha precisa ter pelo menos 8 caracteres.'; }
+  else if (mode === 'signup' && nome.length < 2) err = 'Informe seu nome.';
+  else if (!/\S+@\S+\.\S+/.test(email)) err = 'Informe um e-mail válido.';
+  else if (senha.length < (mode === 'signup' ? 8 : 1)) err = mode === 'signup' ? 'A senha precisa ter pelo menos 8 caracteres.' : 'Informe sua senha.';
+  if (err) return fail(err);
+  const label = $('#submit').innerHTML; $('#submit').innerHTML = '<span class="spinner"></span>'; $('#submit').disabled = true;
+  try {
+    if (novaSenha) { await Prospex.novaSenha(senha); location.href = 'workspace.html'; return; }
+    if (mode === 'signup') {
+      const r = await Prospex.signup(nome, email, senha);
+      if (r.confirmar) { $('#box').innerHTML = `<h1>Confira seu <span class="grad-text">e-mail</span> ✉️</h1><p>Enviamos um link de confirmação para <b>${email.replace(/</g, '')}</b>. Clique nele para ativar a conta.</p>`; return; }
+    } else await Prospex.login(email, senha);
+    location.href = destino;
+  } catch (x) { fail(x.message); $('#submit').innerHTML = label; $('#submit').disabled = false; }
+};
+
+// depoimentos rotativos
+const Q = [
+  ['“Fechei 4 contratos na primeira semana só ligando para os leads de prioridade A. Paguei a lista no primeiro dia.”', 'RM', 'Rafael M.', 'Agência de marketing, Campinas', '#C6FF3D'],
+  ['“Comprei o estado de MG para clínicas e montei a agenda do meu time comercial para o trimestre inteiro.”', 'JS', 'Juliana S.', 'Software para saúde, BH', '#33E1FF'],
+  ['“O link direto de WhatsApp mudou o jogo. Meu SDR faz o triplo de contatos por dia.”', 'CF', 'Carlos F.', 'Consultoria contábil, Curitiba', '#FF4FB8'],
+];
+let qi = 0;
+setInterval(() => {
+  qi = (qi + 1) % Q.length; const [t, a, n, r, c] = Q[qi];
+  $('#qText').style.opacity = $('#qWho').style.opacity = 0;
+  setTimeout(() => {
+    $('#qText').textContent = t;
+    $('#qWho').innerHTML = `<span class="av" style="background:${c}">${a}</span><span><b>${n}</b> · ${r}</span>`;
+    $('#qText').style.opacity = $('#qWho').style.opacity = 1;
+    document.querySelectorAll('#dots i').forEach((d, k) => d.classList.toggle('on', k === qi));
+  }, 400);
+}, 5000);
+</script>
+</body>
+</html>
