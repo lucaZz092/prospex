@@ -116,6 +116,23 @@ h2{font-family:var(--display);font-size:clamp(30px,4vw,46px);line-height:1.1;let
 .plan li::before{content:"✓";color:var(--lime);font-weight:800;margin-right:10px}
 .plan .btn{margin-top:auto}
 
+/* map */
+.map-card{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--bg2)}
+.map{height:clamp(380px,56vh,540px);background:var(--bg2)}
+.map-ui{position:absolute;z-index:500;top:24px;left:24px;background:rgba(10,13,18,.86);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:20px 22px;max-width:320px}
+.map-ui h2{font-size:24px;margin:0 0 14px}
+.map-tabs{display:inline-flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px}
+.map-tabs button{padding:8px 14px;border-radius:7px;font-size:14px;font-weight:600;color:var(--muted);transition:background .2s,color .2s;min-height:36px}
+.map-tabs button:hover{color:var(--text)}
+.map-tabs button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.map-est{margin-top:14px;display:grid;gap:2px;font-size:14px;color:var(--muted)}
+.map-est b{color:var(--text);font-size:16px}
+.leaflet-container{font-family:var(--font);background:var(--bg2)}
+.leaflet-tile-pane{filter:brightness(.55) contrast(1.15) saturate(.6)}
+.leaflet-control-attribution{background:rgba(10,13,18,.7)!important;color:#6B7483!important;font-size:10px}
+.leaflet-control-attribution a{color:#8A93A2!important}
+.leaflet-bar a{background:var(--card)!important;color:var(--text)!important;border-color:var(--line)!important}
+
 /* assurance */
 .assure{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .assure div{border-top:2px solid var(--lime);padding-top:18px}
@@ -243,7 +260,7 @@ td .wa{color:#3DDC84;font-weight:600}
 }
 @media (max-width:560px){
   .steps{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.lead-card{width:180px}
-  .assure{grid-template-columns:1fr}.pv-kpis b{font-size:18px}.mini-table div{grid-template-columns:32px 1.5fr 1fr}.mini-table div span:nth-child(4){display:none}.pay-methods{grid-template-columns:1fr}.pix-box{flex-direction:column}
+  .assure{grid-template-columns:1fr}.map-ui{position:static;max-width:none;border:0;border-bottom:1px solid var(--line);border-radius:0}.map{height:360px}.pv-kpis b{font-size:18px}.mini-table div{grid-template-columns:32px 1.5fr 1fr}.mini-table div span:nth-child(4){display:none}.pay-methods{grid-template-columns:1fr}.pix-box{flex-direction:column}
   .final{padding:56px 20px}
   .nav .btn-ghost{display:none}.nav .btn{white-space:nowrap;padding:10px 14px;font-size:14px}
 }

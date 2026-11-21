@@ -7,6 +7,7 @@
 <meta name="description" content="Escolha seu nicho e sua região. Pague uma vez. Receba uma lista de leads qualificados com telefone, WhatsApp, e-mail e prioridade.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -75,6 +76,23 @@
       <div class="step"><div class="n">02</div><h3>Defina a região</h3><p>Uma cidade, um estado inteiro ou o país. Veja a estimativa de leads na hora.</p></div>
       <div class="step"><div class="n">03</div><h3>Pague uma vez</h3><p>Pix ou cartão. Sem mensalidade, sem fidelidade, sem surpresa.</p></div>
       <div class="step"><div class="n">04</div><h3>Receba e venda</h3><p>Painel + planilha com prioridade A/B/C, WhatsApp, e-mail e redes sociais.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="mapa" style="padding-top:0">
+  <div class="container">
+    <div class="map-card">
+      <div class="map-ui">
+        <h2>Escolha onde vender.</h2>
+        <div class="map-tabs" role="group" aria-label="Abrangência">
+          <button type="button" data-scope="cidade" aria-pressed="true">Cidade</button>
+          <button type="button" data-scope="estado" aria-pressed="false">Estado</button>
+          <button type="button" data-scope="brasil" aria-pressed="false">Brasil</button>
+        </div>
+        <p class="map-est" aria-live="polite"><b id="mapPlace">Campinas, SP</b><span id="mapCount">até ~900 leads</span></p>
+      </div>
+      <div id="map" class="map" aria-label="Mapa com a região escolhida"></div>
     </div>
   </div>
 </section>
@@ -193,6 +211,8 @@
 
 <footer><div class="container"><span class="logo" style="font-size:18px"><span class="logo-mark" style="width:24px;height:24px;font-size:13px">P</span>Prospex</span><span>© 2026 Prospex · um produto SoftSolutions</span><span>Termos · Privacidade · LGPD</span></div></footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="landing.js"></script>
+<script src="map.js"></script>
 </body>
 </html>
