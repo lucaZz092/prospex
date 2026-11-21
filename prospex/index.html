@@ -6,11 +6,10 @@
 <title>Prospex — Leads prontos do seu nicho, na sua região</title>
 <meta name="description" content="Escolha seu nicho e sua região. Pague uma vez. Receba uma lista de leads qualificados com telefone, WhatsApp, e-mail e prioridade.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="cursor-glow" id="glow"></div>
 
 <header class="nav" id="nav">
   <div class="container">
@@ -25,29 +24,39 @@
 <section class="hero">
   <div class="container hero-grid">
     <div>
-      <span class="pill"><b>NOVO</b> Pague uma vez. Sem assinatura.</span>
-      <h1>Clientes de <span class="grad-text rotator" id="rotator">clínicas</span><br>esperando o seu contato.</h1>
+      <span class="pill"><b>Pagamento único</b> Sem assinatura, sem fidelidade</span>
+      <h1>Clientes de <span class="accent rotator" id="rotator">clínicas</span><br>esperando o seu contato.</h1>
       <p class="lead">Escolha o nicho e a região — cidade, estado ou o Brasil inteiro. A Prospex varre, valida e prioriza os leads. Você só precisa ligar.</p>
       <div class="hero-cta">
         <a href="app.html" class="btn btn-primary btn-lg">Montar minha prospecção →</a>
         <a href="#como" class="btn btn-ghost btn-lg">Ver como funciona</a>
       </div>
-      <div class="trust">
-        <div class="avatars"><span style="background:#C6FF3D">LM</span><span style="background:#33E1FF">AR</span><span style="background:#7B5CFF;color:#fff">JS</span><span style="background:#FF4FB8">CF</span></div>
-        <span><b style="color:var(--text)">+1.200 empresas</b> já prospectaram com a Prospex</span>
-      </div>
+      <ul class="trust">
+        <li>Pix ou cartão pelo Mercado Pago</li>
+        <li>Estimativa de leads antes de pagar</li>
+        <li>Devolução se vier 30% abaixo</li>
+      </ul>
     </div>
 
-    <div class="radar-wrap" id="radarWrap">
-      <div class="radar" id="radar">
-        <div class="ring" style="--i:12%"></div><div class="ring" style="--i:25%"></div><div class="ring" style="--i:38%"></div>
-        <div class="cross h"></div><div class="cross v"></div>
-        <div class="sweep"></div>
+    <div class="preview" aria-label="Exemplo do painel da Prospex com um pedido entregue">
+      <div class="pv-bar"><i></i><i></i><i></i><span>Painel Prospex</span></div>
+      <div class="pv-head">
+        <div><small>Pedido de exemplo</small><b>Clínicas odontológicas · Campinas, SP</b></div>
+        <span class="pv-status">Entregue</span>
       </div>
-      <div class="counter-chip">
-        <small>Leads encontrados agora</small>
-        <strong class="grad-text" id="liveCount">1.284.392</strong>
+      <div class="pv-kpis">
+        <div><small>Leads</small><b>842</b></div>
+        <div><small>Prioridade A</small><b>213</b></div>
+        <div><small>Com WhatsApp</small><b>517</b></div>
       </div>
+      <div class="mini-table pv-table">
+        <div><span></span><span>Empresa</span><span>Contato</span><span>Avaliação</span></div>
+        <div><span class="prio A">A</span><span>Odonto Sorriso Leve</span><span class="wa">WhatsApp</span><span>★ 4,9 (204)</span></div>
+        <div><span class="prio A">A</span><span>Clínica Dental Taquaral</span><span>E-mail + tel</span><span>★ 4,8 (131)</span></div>
+        <div><span class="prio B">B</span><span>Centro Odonto Cambuí</span><span class="wa">WhatsApp</span><span>★ 4,6 (58)</span></div>
+        <div><span class="prio C">C</span><span>Consultório Dr. Ramos</span><span>Telefone</span><span>★ 4,2 (11)</span></div>
+      </div>
+      <div class="pv-foot"><span>Exportar CSV</span><span>Exportar Excel</span></div>
     </div>
   </div>
 
@@ -56,55 +65,54 @@
 
 <section class="sec" id="como">
   <div class="container">
-    <div class="sec-head reveal">
+    <div class="sec-head">
       <span class="eyebrow">Como funciona</span>
-      <h2>Do nicho à planilha pronta<br>em <span class="grad-text">4 cliques</span>.</h2>
+      <h2>Do nicho à planilha pronta<br>em <span class="accent">4 cliques</span>.</h2>
       <p>Nada de configurar ferramenta, comprar proxy ou limpar dados. Você escolhe, a gente entrega.</p>
     </div>
     <div class="steps">
-      <div class="step reveal"><div class="n">01</div><h3>Escolha o nicho</h3><p>Clínicas, escritórios, oficinas, imobiliárias… mais de 40 segmentos ou um termo seu.</p></div>
-      <div class="step reveal"><div class="n">02</div><h3>Defina a região</h3><p>Uma cidade, um estado inteiro ou o país. Veja a estimativa de leads na hora.</p></div>
-      <div class="step reveal"><div class="n">03</div><h3>Pague uma vez</h3><p>Pix ou cartão. Sem mensalidade, sem fidelidade, sem surpresa.</p></div>
-      <div class="step reveal"><div class="n">04</div><h3>Receba e venda</h3><p>Painel + planilha com prioridade A/B/C, WhatsApp, e-mail e redes sociais.</p></div>
+      <div class="step"><div class="n">01</div><h3>Escolha o nicho</h3><p>Clínicas, escritórios, oficinas, imobiliárias… mais de 40 segmentos ou um termo seu.</p></div>
+      <div class="step"><div class="n">02</div><h3>Defina a região</h3><p>Uma cidade, um estado inteiro ou o país. Veja a estimativa de leads na hora.</p></div>
+      <div class="step"><div class="n">03</div><h3>Pague uma vez</h3><p>Pix ou cartão. Sem mensalidade, sem fidelidade, sem surpresa.</p></div>
+      <div class="step"><div class="n">04</div><h3>Receba e venda</h3><p>Painel + planilha com prioridade A/B/C, WhatsApp, e-mail e redes sociais.</p></div>
     </div>
   </div>
 </section>
 
 <section class="sec" id="recursos" style="padding-top:0">
   <div class="container">
-    <div class="sec-head reveal">
+    <div class="sec-head">
       <span class="eyebrow">O que você recebe</span>
-      <h2>Não é uma lista.<br>É uma <span class="grad-text">fila de vendas</span>.</h2>
+      <h2>Não é uma lista.<br>É uma <span class="accent">fila de vendas</span>.</h2>
     </div>
     <div class="bento">
-      <div class="tile t-a reveal">
+      <div class="tile t-a">
         <h3>Leads priorizados por chance de fechar</h3>
         <p>Cada empresa recebe uma nota com base em contato disponível, avaliações e presença digital.</p>
         <div class="mini-table">
           <div><span></span><span>Empresa</span><span>Contato</span><span>Avaliação</span></div>
-          <div><span class="prio A">A</span><span>Clínica Vida Plena</span><span style="color:#3DDC84">WhatsApp</span><span>★ 4,9 (312)</span></div>
+          <div><span class="prio A">A</span><span>Clínica Vida Plena</span><span class="wa">WhatsApp</span><span>★ 4,9 (312)</span></div>
           <div><span class="prio A">A</span><span>Contábil Horizonte</span><span>E-mail + tel</span><span>★ 4,8 (128)</span></div>
           <div><span class="prio B">B</span><span>Transportes Rota Sul</span><span>Telefone</span><span>★ 4,5 (61)</span></div>
           <div><span class="prio C">C</span><span>Oficina do Zé</span><span>Telefone</span><span>★ 4,1 (9)</span></div>
         </div>
       </div>
-      <div class="tile t-b reveal">
+      <div class="tile t-b">
         <h3>Contatos validados</h3>
         <p>Telefone, link direto de WhatsApp, e-mail do site e Instagram/LinkedIn.</p>
-        <div class="big-num grad-text" data-count="94">0%</div>
-        <p>dos leads com pelo menos 1 contato direto</p>
+        <ul class="ticks"><li>Link de WhatsApp só para celulares</li><li>E-mail tirado do site da empresa</li><li>Origem de cada contato registrada</li></ul>
       </div>
-      <div class="tile t-c reveal">
+      <div class="tile t-c">
         <h3>Pronto para o seu CRM</h3>
-        <p>Exporte em CSV/Excel ou envie direto para o seu CRM.</p>
+        <p>Exporte em CSV ou Excel, no formato de importação dos principais CRMs.</p>
         <div class="chips" style="margin-top:18px"><span class="chip">Excel</span><span class="chip">CSV</span><span class="chip">RD Station</span><span class="chip">Pipedrive</span><span class="chip">HubSpot</span></div>
       </div>
-      <div class="tile t-d reveal">
+      <div class="tile t-d">
         <h3>Volume por região</h3>
         <p>Estimativa antes de pagar.</p>
         <div class="bars"><i style="--h:35%"></i><i style="--h:55%"></i><i style="--h:42%"></i><i style="--h:78%"></i><i style="--h:64%"></i><i style="--h:92%"></i><i style="--h:70%"></i></div>
       </div>
-      <div class="tile t-e reveal">
+      <div class="tile t-e">
         <h3>Abordagem sugerida</h3>
         <p>Cada nicho vem com um roteiro de primeiro contato e modelo de e-mail para começar a falar hoje.</p>
       </div>
@@ -112,28 +120,44 @@
   </div>
 </section>
 
+<section class="sec" id="confianca" style="padding-top:0">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow">Por que confiar</span>
+      <h2>Dados de empresas, de origem pública, com garantia.</h2>
+      <p>Você sabe de onde vem cada contato e o que acontece se a entrega não bater com a estimativa.</p>
+    </div>
+    <div class="assure">
+      <div><h3>Origem rastreável</h3><p>Perfis públicos no Google Maps e sites das próprias empresas. Cada lead traz a fonte.</p></div>
+      <div><h3>Dentro da LGPD</h3><p>Só contatos comerciais de empresas, nunca dados de consumidores. A lista vem com um guia de abordagem.</p></div>
+      <div><h3>Pagamento protegido</h3><p>Pix ou cartão processados pelo Mercado Pago. A Prospex não guarda os dados do seu cartão.</p></div>
+      <div><h3>Garantia de volume</h3><p>Se a entrega ficar mais de 30% abaixo da estimativa, devolvemos a diferença.</p></div>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="precos" style="padding-top:0">
   <div class="container">
-    <div class="sec-head reveal" style="text-align:center;margin-inline:auto">
+    <div class="sec-head" style="text-align:center;margin-inline:auto">
       <span class="eyebrow">Preços</span>
-      <h2>Pague pela região.<br><span class="grad-text">Uma vez só.</span></h2>
+      <h2>Pague pela região.<br><span class="accent">Uma vez só.</span></h2>
       <p>O preço é por nicho + região. Sem mensalidade.</p>
     </div>
     <div class="pricing">
-      <div class="plan reveal">
+      <div class="plan">
         <h3>Cidade</h3><div class="scope">1 nicho · 1 cidade</div>
         <div class="price">R$ 97</div><div class="once">pagamento único</div>
         <ul><li>Até ~900 leads</li><li>Prioridade A/B/C</li><li>WhatsApp + e-mail</li><li>Entrega em até 1 hora</li></ul>
         <a href="app.html?escopo=cidade" class="btn btn-ghost">Escolher cidade</a>
       </div>
-      <div class="plan hot reveal">
+      <div class="plan hot">
         <span class="badge">MAIS ESCOLHIDO</span>
         <h3>Estado</h3><div class="scope">1 nicho · estado inteiro</div>
         <div class="price">R$ 397</div><div class="once">pagamento único</div>
         <ul><li>Até ~12.000 leads</li><li>Todas as cidades do estado</li><li>Redes sociais incluídas</li><li>Roteiro de abordagem do nicho</li><li>Entrega em até 6 horas</li></ul>
         <a href="app.html?escopo=estado" class="btn btn-primary">Escolher estado</a>
       </div>
-      <div class="plan reveal">
+      <div class="plan">
         <h3>Brasil</h3><div class="scope">1 nicho · país inteiro</div>
         <div class="price">R$ 1.497</div><div class="once">pagamento único</div>
         <ul><li>Até ~150.000 leads</li><li>Segmentado por estado</li><li>Tudo do plano Estado</li><li>Entrega em até 48 horas</li></ul>
@@ -145,8 +169,8 @@
 
 <section class="sec" id="faq" style="padding-top:0">
   <div class="container">
-    <div class="sec-head reveal" style="text-align:center;margin-inline:auto"><span class="eyebrow">Dúvidas</span><h2>Perguntas frequentes</h2></div>
-    <div class="faq reveal">
+    <div class="sec-head" style="text-align:center;margin-inline:auto"><span class="eyebrow">Dúvidas</span><h2>Perguntas frequentes</h2></div>
+    <div class="faq">
       <details open><summary>De onde vêm os leads?</summary><p>De perfis públicos de empresas (Google Maps e sites das próprias empresas). Só dados comerciais de empresas — nada de dados pessoais de consumidores.</p></details>
       <details><summary>É uma assinatura?</summary><p>Não. Você paga uma vez por nicho + região e a lista é sua. Se quiser atualizar depois, faz um novo pedido com desconto.</p></details>
       <details><summary>Quanto tempo demora?</summary><p>Cidade em até 1 hora, estado em até 6 horas e Brasil em até 48 horas. Você acompanha o progresso em tempo real e recebe um e-mail quando terminar.</p></details>
@@ -158,16 +182,16 @@
 
 <section style="padding:20px 0 0">
   <div class="container">
-    <div class="final reveal">
+    <div class="final">
       <span class="eyebrow">Sua próxima venda está no mapa</span>
-      <h2 style="margin-top:14px">Pare de procurar cliente.<br><span class="grad-text">Comece a ligar.</span></h2>
+      <h2 style="margin-top:14px">Pare de procurar cliente.<br><span class="accent">Comece a ligar.</span></h2>
       <p>Monte sua primeira prospecção em menos de 1 minuto.</p>
       <a href="app.html" class="btn btn-primary btn-lg">Montar minha prospecção →</a>
     </div>
   </div>
 </section>
 
-<footer><div class="container"><span class="logo" style="font-size:18px"><span class="logo-mark" style="width:24px;height:24px;font-size:13px">P</span>Prospex</span><span>© 2026 Prospex · uma empresa SoftSolutions</span><span>Termos · Privacidade · LGPD</span></div></footer>
+<footer><div class="container"><span class="logo" style="font-size:18px"><span class="logo-mark" style="width:24px;height:24px;font-size:13px">P</span>Prospex</span><span>© 2026 Prospex · um produto SoftSolutions</span><span>Termos · Privacidade · LGPD</span></div></footer>
 
 <script src="landing.js"></script>
 </body>
