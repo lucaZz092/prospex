@@ -1,3 +1,36 @@
 {
-  "buildPath": "code"
+  "buildPath": "code",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "prospex/termos.html"
+        ],
+        "createdAt": "2026-11-23T14:20:15.156Z",
+        "reason": "Claude: página legal sem faixa rolante; o detector lê a regra .marquee do styles.css compartilhado"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "prospex/privacidade.html"
+        ],
+        "createdAt": "2026-11-23T14:20:15.170Z",
+        "reason": "Claude: página legal sem faixa rolante; o detector lê a regra .marquee do styles.css compartilhado"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "prospex/guia-lgpd.html"
+        ],
+        "createdAt": "2026-11-23T14:20:15.182Z",
+        "reason": "Claude: página legal sem faixa rolante; o detector lê a regra .marquee do styles.css compartilhado"
+      }
+    ]
+  }
 }

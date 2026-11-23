@@ -1,6 +1,6 @@
 const $ = s => document.querySelector(s);
 const fmt = n => Math.round(n).toLocaleString('pt-BR');
-const brl = n => 'R$ ' + n.toLocaleString('pt-BR');
+const brl = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 });
 
 const NICHOS = [
   ['🩺', 'Clínicas médicas', 'Saúde', 1.0], ['🦷', 'Odontologia', 'Saúde', .9], ['💆', 'Estética', 'Saúde', .8],
@@ -17,36 +17,42 @@ const ESCOPO = {
   estado: { label: 'Estado', preco: 397, base: 12000 },
   pais: { label: 'Brasil', preco: 1497, base: 150000 },
 };
+// Igual a supabase/functions/_shared/pricing.ts. E-mail e roteiro vêm em todos os planos;
+// redes sociais vêm no Estado e no Brasil e são o único extra do plano Cidade.
 const EXTRAS = [
-  ['emails', 'Busca profunda de e-mails', 'Visita páginas de contato e “sobre” de cada site', 0.25],
   ['socials', 'Instagram e LinkedIn', 'Perfis sociais de cada empresa', 0.15],
-  ['roteiro', 'Kit de abordagem do nicho', 'Roteiro de ligação + 3 modelos de e-mail', 47],
-  ['crm', 'Envio direto para CRM', 'RD Station, Pipedrive ou HubSpot', 67],
 ];
+const INCLUSO = {
+  cidade: 'telefone, link de WhatsApp, e-mail do site, avaliação, prioridade A/B/C e roteiro de abordagem do nicho',
+  estado: 'telefone, WhatsApp, e-mail, Instagram e LinkedIn, prioridade A/B/C e roteiro de abordagem, em todas as cidades do estado',
+  pais: 'telefone, WhatsApp, e-mail, Instagram e LinkedIn, prioridade A/B/C e roteiro de abordagem, segmentado por estado',
+};
 
 const st = { step: 0, nicho: null, custom: '', escopo: new URLSearchParams(location.search).get('escopo') || 'cidade',
-  cidade: '', estado: 'SP', extras: new Set(['emails']), pay: 'pix', email: '', nome: '' };
+  cidade: '', estado: 'SP', extras: new Set(), pay: 'pix', email: '', nome: '', cliente: false };
 const STEPS = ['Nicho', 'Região', 'Extras', 'Pagamento'];
 
 const nichoMult = () => st.nicho ? st.nicho[3] : (st.custom ? .6 : 0);
 const regiaoOk = () => st.escopo === 'pais' || (st.escopo === 'estado' && st.estado) || (st.escopo === 'cidade' && st.cidade.length > 2);
-const estimate = () => (nichoMult() && regiaoOk()) ? ESCOPO[st.escopo].base * nichoMult() : 0;
+const estimate = () => (nichoMult() && regiaoOk()) ? ESCOPO[st.escopo].base * Math.min(1, nichoMult()) : 0;
 function total() {
   const base = ESCOPO[st.escopo].preco;
   let t = base;
-  EXTRAS.forEach(([k, , , v]) => { if (st.extras.has(k)) t += v < 1 ? Math.round(base * v) : v; });
-  return st.pay === 'pix' ? Math.round(t * .95) : t;
+  if (st.escopo === 'cidade') EXTRAS.forEach(([k, , , v]) => { if (st.extras.has(k)) t += Math.round(base * v * 100) / 100; });
+  if (st.cliente) t = t * .8;
+  if (st.pay === 'pix') t = t * .95;
+  return Math.round(t * 100) / 100;
 }
 
 function summary() {
   $('#sNicho').textContent = st.nicho ? st.nicho[1] : (st.custom || '—');
   $('#sRegiao').textContent = !regiaoOk() ? '—' : st.escopo === 'pais' ? 'Brasil inteiro' : st.escopo === 'estado' ? 'Estado de ' + st.estado : st.cidade;
-  $('#sExtras').textContent = st.extras.size ? [...st.extras].map(k => EXTRAS.find(e => e[0] === k)[1].split(' ')[0]).join(', ') : 'Nenhum';
+  $('#sExtras').textContent = st.escopo !== 'cidade' ? 'Redes sociais incluídas' : st.extras.size ? 'Instagram e LinkedIn' : 'Nenhum';
   const e = estimate();
   animateNum($('#sEst'), e, v => '~' + fmt(v));
   $('#sEstSub').textContent = e ? `empresas · ~${fmt(e * .4)} com WhatsApp` : 'escolha nicho e região';
   $('#sMeter').style.width = Math.min(100, e / 1500) + (e ? 8 : 0) + '%';
-  animateNum($('#sTotal'), total(), v => brl(Math.round(v)));
+  animateNum($('#sTotal'), total(), v => brl(Math.round(v * 100) / 100));
 }
 function animateNum(el, to, f) {
   const from = +(el.dataset.v || 0); el.dataset.v = to;
@@ -82,10 +88,10 @@ const views = {
   2() {
     return `<div class="panel">
       <div class="step-label">Passo 3 de 4</div>
-      <h2>Turbine sua <span class="grad-text">lista</span></h2>
-      <p>Opcional. Já incluso em todos: telefone, WhatsApp, site, avaliação e prioridade A/B/C.</p>
-      <div class="opts">${EXTRAS.map(([k, t, d, v]) => `<label class="opt"><input type="checkbox" data-x="${k}" ${st.extras.has(k) ? 'checked' : ''}>
-        <div><b>${t}</b><small>${d}</small></div><span class="plus">+ ${v < 1 ? brl(Math.round(ESCOPO[st.escopo].preco * v)) : brl(v)}</span></label>`).join('')}</div>
+      <h2>O que vem na <span class="grad-text">lista</span></h2>
+      <p>Incluído: ${INCLUSO[st.escopo]}.</p>
+      ${st.escopo === 'cidade' ? `<div class="opts">${EXTRAS.map(([k, t, d, v]) => `<label class="opt"><input type="checkbox" data-x="${k}" ${st.extras.has(k) ? 'checked' : ''}>
+        <div><b>${t}</b><small>${d} (opcional)</small></div><span class="plus">+ ${brl(Math.round(ESCOPO[st.escopo].preco * v * 100) / 100)}</span></label>`).join('')}</div>` : ''}
       <div class="nav-btns"><button class="btn btn-ghost" id="back">← Voltar</button><button class="btn btn-primary" id="next">Ir para pagamento →</button></div></div>`;
   },
   3() {
@@ -94,7 +100,7 @@ const views = {
       <h2>Falta <span class="grad-text">pouco</span>.</h2>
       <p>A lista fica na sua área de trabalho assim que ficar pronta.</p>
       <div class="opt" style="cursor:default;margin-bottom:18px" id="conta"><span style="font-size:22px">👤</span><div><b>Verificando sua conta…</b></div></div>
-      <div class="pay-methods">${[['pix', '⚡ Pix'], ['card', '💳 Cartão'], ['boleto', '🧾 Boleto']].map(([k, l]) => `<button class="pm ${st.pay === k ? 'on' : ''}" data-p="${k}">${l}</button>`).join('')}</div>
+      <div class="pay-methods">${[['pix', '⚡ Pix'], ['card', '💳 Cartão']].map(([k, l]) => `<button class="pm ${st.pay === k ? 'on' : ''}" data-p="${k}">${l}</button>`).join('')}</div>
       <div id="payBox"></div>
       <div class="nav-btns"><button class="btn btn-ghost" id="back">← Voltar</button><button class="btn btn-primary btn-lg" id="pay">Pagar ${brl(total())} →</button></div></div>`;
   },
@@ -146,13 +152,13 @@ const bind = {
     const box = () => {
       $('#payBox').innerHTML = st.pay === 'pix'
         ? `<div class="pix-box"><div class="qr"><div>${qr()}</div></div><div><b>Pix com aprovação na hora</b><p style="color:var(--muted);font-size:14px;margin:6px 0 12px">O QR Code real é gerado ao confirmar. A prospecção começa assim que o pagamento cair.</p><span class="chip on">5% de desconto no Pix</span></div></div>`
-        : st.pay === 'card'
-        ? `<div class="opt" style="cursor:default"><span style="font-size:24px">💳</span><div><b>Cartão em até 12x</b><small>Você digita os dados do cartão no ambiente seguro do Mercado Pago. Nada passa pelos nossos servidores.</small></div></div>`
-        : `<div class="opt" style="cursor:default"><span style="font-size:24px">🧾</span><div><b>Boleto bancário</b><small>Compensação em até 2 dias úteis. A prospecção começa após a confirmação.</small></div></div>`;
+        : `<div class="opt" style="cursor:default"><span style="font-size:24px">💳</span><div><b>Cartão em até 12x</b><small>Você digita os dados do cartão no ambiente seguro do Mercado Pago. Nada passa pelos nossos servidores.</small></div></div>`;
     };
     document.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { st.pay = b.dataset.p; document.querySelectorAll('[data-p]').forEach(x => x.classList.toggle('on', x === b)); box(); summary(); $('#pay').textContent = `Pagar ${brl(total())} →`; });
-    Prospex.me().then(u => {
+    Prospex.me().then(async u => {
       st.logado = !!u;
+      if (u) { try { st.cliente = await Prospex.jaCliente(); } catch (e) {} summary(); $('#pay').textContent = `Pagar ${brl(total())} →`;
+        if (st.cliente) $('#payBox').insertAdjacentHTML('beforebegin', '<p class="secure" style="margin:0 0 12px">20% de desconto de cliente aplicado.</p>'); }
       $('#conta').innerHTML = u ? `<span style="font-size:22px">👤</span><div><b>${u.nome}</b><small>${u.email} · a lista vai para esta conta</small></div>`
         : `<span style="font-size:22px">👤</span><div><b>Crie sua conta para pagar</b><small>Leva 20 segundos — é nela que você recebe e trabalha os leads.</small></div>`;
       if (!u) $('#pay').textContent = 'Criar conta e pagar →';
@@ -231,7 +237,7 @@ function processing(order) {
 
 function confetti() {
   const c = $('#confetti'), x = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight;
-  const cols = ['#C6FF3D', '#33E1FF', '#7B5CFF', '#FF4FB8'];
+  const cols = ['#B9EE52', '#6FB7E8', '#EDF0F4', '#97A0AE'];
   const ps = Array.from({ length: 140 }, () => ({ x: innerWidth / 2, y: innerHeight / 3, vx: (Math.random() - .5) * 16, vy: Math.random() * -14 - 4, s: Math.random() * 6 + 3, c: cols[Math.random() * 4 | 0], r: Math.random() * 6 }));
   let f = 0;
   (function loop() { x.clearRect(0, 0, c.width, c.height);
@@ -240,4 +246,6 @@ function confetti() {
 }
 
 if (location.hash === '#pagar') restaurar();
+st.extras.delete('emails'); st.extras.delete('roteiro'); st.extras.delete('crm');
+if (st.pay === 'boleto') st.pay = 'pix';
 render();
