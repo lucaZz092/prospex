@@ -27,6 +27,7 @@ http = httpx.Client(base_url=f"{SB_URL}/rest/v1", headers=H, timeout=30)
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 KIT = os.environ.get("PROSPEX_KIT") or os.path.join(REPO, "softsolutions_prospeccao", "google-maps-scraper-kit")
+KIT_PY = os.environ.get("PROSPEX_KIT_PYTHON", "python3")  # o Python que tem as dependências do kit
 DEPTH = int(os.environ.get("PROSPEX_DEPTH", "3"))
 DEMO = os.environ.get("PROSPEX_DEMO_LEADS") == "1"
 MP = os.environ.get("MP_ACCESS_TOKEN", "")
@@ -96,7 +97,7 @@ def tempo_da_cidade(restante, pesos_restantes, peso):
 # ---------- busca ----------
 def kit_ok() -> bool:
     if not os.path.isdir(KIT): return False
-    r = subprocess.run([sys.executable, "scripts/engine.py", "status"], cwd=KIT, capture_output=True, text=True)
+    r = subprocess.run([KIT_PY, "scripts/engine.py", "status"], cwd=KIT, capture_output=True, text=True)
     return r.returncode == 0
 
 
@@ -113,7 +114,7 @@ def _raspar(o, tmp):
             break
         seg = int(min(tempo_da_cidade(restante, pesos[i:], peso), restante))
         out = os.path.join(tmp, f"c{i}.csv")
-        cmd = [sys.executable, "scripts/scrape.py", f"{o['nicho']} em {cidade}", "--city", cidade, "--lang", "pt",
+        cmd = [KIT_PY, "scripts/scrape.py", f"{o['nicho']} em {cidade}", "--city", cidade, "--lang", "pt",
                "--country", "br", "--depth", str(prof), "--has-phone", "--max-time", str(seg), "--out", out]
         if not socials: cmd.append("--no-socials")
         try:
