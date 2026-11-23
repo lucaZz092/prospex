@@ -115,7 +115,7 @@
 .order .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
 .order .nums div{background:var(--bg2);border-radius:10px;padding:10px;text-align:center}
 .order .nums b{display:block;font-family:var(--display);font-size:18px}.order .nums small{font-size:11px;color:var(--muted)}
-.order .acts{display:flex;gap:8px}.order .acts .btn{flex:1;padding:9px;font-size:13px}
+.order .acts{display:flex;gap:8px;flex-wrap:wrap}.order .acts .btn{flex:1 1 40%;padding:9px;font-size:13px}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
 .filters select.input{width:auto;padding:9px 12px;font-size:13px;border-radius:10px}
 .kanban{display:grid;grid-template-columns:repeat(5,minmax(230px,1fr));gap:12px;overflow-x:auto;padding-bottom:10px}

@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 set -a; . ./.env; set +a
 [ -d .venv ] || python3 -m venv .venv
 .venv/bin/pip install -q -r worker/requirements.txt
-[ "${1:-}" = "--real" ] || export PROSPEX_DEMO_LEADS=1
+[ "${1:-}" = "--real" ] || { export PROSPEX_DEMO_LEADS=1; echo "Modo demonstração: leads fictícios (use --real para a busca de verdade)"; }
 python3 -m http.server "${PORT:-8000}" --bind 127.0.0.1 >/dev/null 2>&1 &
 SITE=$!; trap 'kill $SITE' EXIT
 echo "Site: http://localhost:${PORT:-8000}"

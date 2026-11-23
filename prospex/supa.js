@@ -52,15 +52,47 @@ const Prospex = {
   },
   async atualizarLead(id, patch) { const { error } = await sb.from('leads').update(patch).eq('id', id); if (error) throw new Error('Não foi possível salvar o lead'); },
 
-  async baixarCSV(orderId, nome) {
-    const cols = ['prioridade', 'pontos', 'empresa', 'segmento', 'categoria', 'telefone', 'whatsapp', 'email', 'site', 'instagram', 'linkedin', 'endereco', 'avaliacao', 'n_avaliacoes', 'abordagem', 'etapa', 'notas'];
-    const { data, error } = await sb.from('leads').select(cols.join(',')).eq('order_id', orderId).order('pontos', { ascending: false }).limit(200000);
+  async jaCliente() {
+    const { count, error } = await sb.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'pronta');
     if (error) throw error;
+    return (count || 0) > 0;
+  },
+  async _linhas(orderId) {
+    const cols = ['prioridade', 'pontos', 'empresa', 'segmento', 'categoria', 'telefone', 'whatsapp', 'email', 'site', 'instagram', 'linkedin', 'endereco', 'cidade', 'avaliacao', 'n_avaliacoes', 'abordagem', 'fonte', 'etapa', 'notas'];
+    const rows = [];
+    for (let de = 0; ; de += 1000) {
+      const { data, error } = await sb.from('leads').select(cols.join(',')).eq('order_id', orderId).order('pontos', { ascending: false }).range(de, de + 999);
+      if (error) throw error;
+      rows.push(...data);
+      if (data.length < 1000) break;
+    }
+    return { cols, rows };
+  },
+  _nome(orderId, nome, ext) { return (nome || 'prospex_' + orderId).toLowerCase().normalize('NFD').replace(/[^\w]+/g, '_') + ext; },
+  _baixar(blob, arquivo) {
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: arquivo });
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  },
+  async baixarExcel(orderId, nome) {
+    const { cols, rows } = await this._linhas(orderId);
+    if (!window.XLSX) await new Promise((ok, falha) => document.head.appendChild(Object.assign(document.createElement('script'),
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', onload: ok, onerror: falha })));
+    const ws = XLSX.utils.json_to_sheet(rows, { header: cols });
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Leads');
+    const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    this._baixar(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), this._nome(orderId, nome, '.xlsx'));
+  },
+  baixarKit(order) {
+    const k = order.kit; if (!k) throw new Error('Kit ainda não disponível');
+    const txt = `KIT DE ABORDAGEM: ${order.nicho}\n\nROTEIRO DE LIGAÇÃO\n${k.ligacao.map((l, i) => `${i + 1}. ${l}`).join('\n')}\n\n`
+      + `MODELO DE E-MAIL\nAssunto: ${k.email_assunto}\n\n${k.email}\n\nBoas práticas de contato (LGPD): ${location.origin}/guia-lgpd.html\n`;
+    this._baixar(new Blob([txt], { type: 'text/plain;charset=utf-8' }), this._nome(order.id, 'kit_abordagem_' + order.nicho, '.txt'));
+  },
+  async baixarCSV(orderId, nome) {
+    const { cols, rows: data } = await this._linhas(orderId);
     const cel = v => { let s = v == null ? '' : String(v); if (/^[=+\-@]/.test(s)) s = "'" + s; return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
     const csv = '﻿' + [cols.join(','), ...data.map(r => cols.map(c => cel(r[c])).join(','))].join('\n');
-    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })),
-      download: (nome || 'prospex_' + orderId).toLowerCase().normalize('NFD').replace(/[^\w]+/g, '_') + '.csv' });
-    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    this._baixar(new Blob([csv], { type: 'text/csv;charset=utf-8' }), this._nome(orderId, nome, '.csv'));
   },
 };
 

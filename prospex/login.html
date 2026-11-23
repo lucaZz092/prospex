@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Prospex — Entrar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="auth.css">
 </head>
@@ -56,8 +56,8 @@
       <div class="core">P</div>
     </div>
     <div class="quote">
-      <p id="qText">“Fechei 4 contratos na primeira semana só ligando para os leads de prioridade A. Paguei a lista no primeiro dia.”</p>
-      <div class="who" id="qWho"><span class="av">RM</span><span><b>Rafael M.</b> · Agência de marketing, Campinas</span></div>
+      <p id="qText">Leads com prioridade A/B/C, link de WhatsApp para celulares e e-mail do site da empresa.</p>
+      <div class="who" id="qWho"><span class="av" style="background:#B9EE52;color:#0A0D12">A</span><span><b>O que vem na lista</b> · Em todos os planos</span></div>
     </div>
     <div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>
   </div>
@@ -82,7 +82,7 @@ function setMode(m) {
   $('#subtitle').textContent = s ? 'Leva 20 segundos. Sem cartão para criar a conta.' : 'Seus leads estão esperando por você.';
   $('#submit').textContent = s ? 'Criar minha conta →' : 'Entrar na minha área →';
   $('#senha').autocomplete = s ? 'new-password' : 'current-password';
-  $('#fine').innerHTML = s ? 'Ao criar a conta você aceita os <a href="#">Termos</a> e a <a href="#">Política de Privacidade</a>.' : 'Ainda não comprou? <a href="app.html">Monte sua primeira prospecção</a>';
+  $('#fine').innerHTML = s ? 'Ao criar a conta você aceita os <a href="termos.html" target="_blank">Termos</a> e a <a href="privacidade.html" target="_blank">Política de Privacidade</a>.' : 'Ainda não comprou? <a href="app.html">Monte sua primeira prospecção</a>';
   $('#err').textContent = '';
 }
 document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode));
@@ -128,11 +128,11 @@ $('#form').onsubmit = async e => {
   } catch (x) { fail(x.message); $('#submit').innerHTML = label; $('#submit').disabled = false; }
 };
 
-// depoimentos rotativos
+// fatos do produto (sem depoimentos até haver clientes reais que autorizem)
 const Q = [
-  ['“Fechei 4 contratos na primeira semana só ligando para os leads de prioridade A. Paguei a lista no primeiro dia.”', 'RM', 'Rafael M.', 'Agência de marketing, Campinas', '#C6FF3D'],
-  ['“Comprei o estado de MG para clínicas e montei a agenda do meu time comercial para o trimestre inteiro.”', 'JS', 'Juliana S.', 'Software para saúde, BH', '#33E1FF'],
-  ['“O link direto de WhatsApp mudou o jogo. Meu SDR faz o triplo de contatos por dia.”', 'CF', 'Carlos F.', 'Consultoria contábil, Curitiba', '#FF4FB8'],
+  ['Leads com prioridade A/B/C, link de WhatsApp para celulares e e-mail do site da empresa.', 'A', 'O que vem na lista', 'Em todos os planos', '#B9EE52'],
+  ['Estimativa de leads antes de pagar. Se a entrega vier mais de 30% abaixo, devolvemos a diferença.', '✓', 'Garantia de volume', 'Devolução automática', '#6FB7E8'],
+  ['Pagamento único por Pix ou cartão, processado pelo Mercado Pago. Sem assinatura.', 'R$', 'Pagamento', 'Pix com 5% de desconto', '#EDF0F4'],
 ];
 let qi = 0;
 setInterval(() => {
@@ -140,7 +140,7 @@ setInterval(() => {
   $('#qText').style.opacity = $('#qWho').style.opacity = 0;
   setTimeout(() => {
     $('#qText').textContent = t;
-    $('#qWho').innerHTML = `<span class="av" style="background:${c}">${a}</span><span><b>${n}</b> · ${r}</span>`;
+    $('#qWho').innerHTML = `<span class="av" style="background:${c};color:#0A0D12">${a}</span><span><b>${n}</b> · ${r}</span>`;
     $('#qText').style.opacity = $('#qWho').style.opacity = 1;
     document.querySelectorAll('#dots i').forEach((d, k) => d.classList.toggle('on', k === qi));
   }, 400);

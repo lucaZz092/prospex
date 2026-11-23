@@ -17,7 +17,7 @@ let user = {}, primeiro = '', ORDERS = [], LEADS = [];
 function mapOrder(o) {
   const esc = { cidade: 'Cidade', estado: 'Estado', pais: 'Brasil' }[o.escopo];
   return { id: o.id, em: emoji(o.nicho), nicho: o.nicho, reg: o.escopo === 'estado' ? 'Estado de ' + o.regiao : o.regiao, escopo: esc,
-    leads: o.total, a: o.a, wa: o.wa, mail: o.mail, st: ST[o.status] || 'q', raw: o.status, erro: o.erro,
+    leads: o.total, a: o.a, wa: o.wa, mail: o.mail, st: ST[o.status] || 'q', raw: o.status, erro: o.erro, kit: o.kit, reembolso: o.reembolso_centavos, reembolsoSt: o.reembolso_status,
     p: o.progresso, data: (o.criado_em || '').slice(0, 10).split('-').reverse().join('/') };
 }
 function mapLead(l) {
@@ -125,11 +125,15 @@ function prospeccoes() {
       <h3>${o.nicho}</h3><div class="reg">${o.reg} · ${o.escopo} · ${o.data}</div>
       ${o.st === 'run' ? `<div class="mini-prog" style="margin-top:14px"><i style="--p:${o.p}%"></i></div>` : ''}
       <div class="nums"><div><b>${o.leads ? fmt(o.leads) : '—'}</b><small>leads</small></div><div><b style="color:var(--lime)">${o.a ? fmt(o.a) : '—'}</b><small>prioridade A</small></div><div><b>${o.wa ? fmt(o.wa) : '—'}</b><small>WhatsApp</small></div></div>
-      <div class="acts">${o.st === 'ok' ? `<button class="btn btn-primary" data-open="${o.id}">Abrir leads</button><button class="btn btn-ghost" data-dl="${o.id}">⬇ CSV</button>` : `<button class="btn btn-ghost" disabled style="opacity:.6">${o.raw === 'erro' ? 'Falhou: ' + (o.erro || 'erro') : 'Avisaremos por e-mail'}</button>`}</div>
+      ${o.reembolso ? `<div class="reg" style="margin-top:10px">Garantia: ${o.reembolsoSt === 'devolvido' ? 'devolvemos' : 'vamos devolver'} R$ ${(o.reembolso / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</div>` : ''}
+      ${o.st === 'ok' ? '<div class="reg" style="margin-top:6px"><a href="guia-lgpd.html" target="_blank" style="text-decoration:underline">Guia de boas práticas de contato (LGPD)</a></div>' : ''}
+      <div class="acts">${o.st === 'ok' ? `<button class="btn btn-primary" data-open="${o.id}">Abrir leads</button><button class="btn btn-ghost" data-dl="${o.id}">⬇ CSV</button><button class="btn btn-ghost" data-xl="${o.id}">⬇ Excel</button><button class="btn btn-ghost" data-kit="${o.id}">Kit de abordagem</button>` :`<button class="btn btn-ghost" disabled style="opacity:.6">${o.raw === 'erro' ? 'Falhou: ' + (o.erro || 'erro') : 'Avisaremos por e-mail'}</button>`}</div>
     </div>`).join('')}
     <a href="app.html" class="order" style="display:grid;place-items:center;text-align:center;border-style:dashed;min-height:240px"><div><div style="font-size:34px">＋</div><b>Nova região ou nicho</b><div class="reg">20% off para clientes</div></div></a></div>`;
   $$('[data-open]').forEach(b => b.onclick = e => { e.stopPropagation(); store.set('filtroO', +b.dataset.open); location.hash = 'leads'; });
   $$('[data-dl]').forEach(b => b.onclick = e => { e.stopPropagation(); const o = ORDERS.find(x => x.id === +b.dataset.dl); Prospex.baixarCSV(o.id, `prospex_${o.nicho}_${o.reg}`).catch(() => toast('Falha no download')); });
+  $$('[data-xl]').forEach(b => b.onclick = e => { e.stopPropagation(); const o = ORDERS.find(x => x.id === +b.dataset.xl); Prospex.baixarExcel(o.id, `prospex_${o.nicho}_${o.reg}`).catch(() => toast('Falha no download')); });
+  $$('[data-kit]').forEach(b => b.onclick = e => { e.stopPropagation(); const o = ORDERS.find(x => x.id === +b.dataset.kit); try { Prospex.baixarKit({ id: o.id, nicho: o.nicho, kit: o.kit }); } catch (err) { toast(err.message); } });
 }
 
 function leads() {
