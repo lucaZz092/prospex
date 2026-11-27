@@ -72,12 +72,20 @@ Deno.serve(async (req) => {
     }
   } catch (e) {
     console.error("pagamento", e);
-    await admin.from("orders").update({ status: "erro", erro: "Falha ao criar pagamento" }).eq("id", order.id);
+    // Uma resposta perdida do provedor ainda pode gerar um webhook aprovado.
+    // Preserve o pedido pendente para permitir a conciliação.
     return json({ detail: "Não foi possível iniciar o pagamento. Tente novamente." }, 502);
   }
 
   const upd: Record<string, unknown> = { pagamento_id: pagamento.id };
   if (pagamento.status === "approved") upd.status = "na_fila";
-  const { data: final } = await admin.from("orders").update(upd).eq("id", order.id).select().single();
-  return json({ order: final, pagamento });
+  const { data: updated, error: updateError } = await admin.from("orders").update(upd)
+    .eq("id", order.id).eq("status", "aguardando_pagamento").select().maybeSingle();
+  if (updateError) return json({ detail: "Falha ao registrar o pagamento. Confira o pedido antes de tentar novamente." }, 503);
+  if (updated) return json({ order: updated, pagamento });
+
+  // O webhook pode confirmar o pagamento antes de o checkout receber a resposta.
+  const { data: current, error: readError } = await admin.from("orders").select().eq("id", order.id).single();
+  if (readError || !current) return json({ detail: "Não foi possível consultar o pedido" }, 503);
+  return json({ order: current, pagamento });
 });
