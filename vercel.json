@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "buildCommand": "node prospex/build.mjs",
+  "outputDirectory": "prospex/dist",
+  "cleanUrls": false,
+  "trailingSlash": false
+}
