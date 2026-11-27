@@ -3,8 +3,8 @@
  * O backend (Supabase Edge Functions) e o worker Python não fazem parte deste deploy.
  * SUPABASE_ANON_KEY é pública; nunca use a service-role key aqui.
  */
-import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join } from 'node:path';
+import { cpSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const source = dirname(fileURLToPath(import.meta.url));
