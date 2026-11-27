@@ -208,29 +208,38 @@ def processar(o):
                   for l in leads]
         for i in range(0, len(linhas), 500):
             http.post("/leads", json=linhas[i:i + 500], headers={"Prefer": "return=minimal"}).raise_for_status()
-        _set(oid, status="pronta", progresso=100, kit=kit_abordagem(o["nicho"]),
-             concluido_em=datetime.now(timezone.utc).isoformat())
-        print(f"pedido {oid}: {len(linhas)} leads", flush=True)
-
-        texto = (f"Sua lista de {o['nicho']} em {o['regiao']} está pronta: {len(linhas)} empresas, "
-                 f"com prioridade A/B/C e o roteiro de abordagem do nicho.\n\n"
-                 f"Abra em {SITE}/workspace.html#prospeccoes\n")
-        est = o.get("estimativa") or 0
-        if est and len(linhas) < GARANTIA * est:
-            dif = round(o["valor_centavos"] * (1 - len(linhas) / est))
-            if devolver(o, dif, f"Entrega de {len(linhas)} leads para estimativa de {est}"):
-                texto += f"\nA entrega ficou mais de 30% abaixo da estimativa. Devolvemos {brl(dif)} no seu meio de pagamento.\n"
-            else:
-                texto += f"\nA entrega ficou mais de 30% abaixo da estimativa. A devolução de {brl(dif)} será feita em até 7 dias.\n"
-        avisar(o, "Sua lista da Prospex está pronta", texto)
     except Exception as e:
         traceback.print_exc()
-        _set(oid, status="erro", erro=str(e)[:300])
+        _set(oid, status="erro", erro=str(e)[:300], reembolso_centavos=o["valor_centavos"],
+             reembolso_status="pendente", reembolso_motivo=f"Falha na busca: {str(e)[:200]}")
         dev = devolver(o, o["valor_centavos"], f"Falha na busca: {str(e)[:200]}")
         avisar(o, "Não conseguimos concluir sua lista na Prospex",
                f"A busca de {o['nicho']} em {o['regiao']} falhou: {str(e)[:200]}.\n\n"
                + (f"Devolvemos {brl(dev)} no seu meio de pagamento.\n" if dev else
                   "Vamos devolver o valor pago em até 7 dias.\n"))
+        return
+
+    est = o.get("estimativa") or 0
+    garantia = {}
+    if est and len(linhas) < GARANTIA * est:
+        garantia = {"reembolso_centavos": round(o["valor_centavos"] * (1 - len(linhas) / est)),
+                    "reembolso_status": "pendente",
+                    "reembolso_motivo": f"Entrega de {len(linhas)} leads para estimativa de {est}"}
+    # Grave a decisão de garantia junto com a entrega antes de contatar serviços externos.
+    _set(oid, status="pronta", progresso=100, kit=kit_abordagem(o["nicho"]),
+         concluido_em=datetime.now(timezone.utc).isoformat(), **garantia)
+    print(f"pedido {oid}: {len(linhas)} leads", flush=True)
+
+    texto = (f"Sua lista de {o['nicho']} em {o['regiao']} está pronta: {len(linhas)} empresas, "
+             f"com prioridade A/B/C e o roteiro de abordagem do nicho.\n\n"
+             f"Abra em {SITE}/workspace.html#prospeccoes\n")
+    if garantia:
+        dif = garantia["reembolso_centavos"]
+        if devolver(o, dif, garantia["reembolso_motivo"]):
+            texto += f"\nA entrega ficou mais de 30% abaixo da estimativa. Devolvemos {brl(dif)} no seu meio de pagamento.\n"
+        else:
+            texto += f"\nA entrega ficou mais de 30% abaixo da estimativa. A devolução de {brl(dif)} será feita em até 7 dias.\n"
+    avisar(o, "Sua lista da Prospex está pronta", texto)
 
 
 def main():

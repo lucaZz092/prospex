@@ -6,7 +6,7 @@ const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE
 const MP = Deno.env.get("MP_ACCESS_TOKEN") ?? "";
 
 Deno.serve(async (req) => {
-  if (!MP) return new Response("ok");
+  if (!MP) return new Response("retry", { status: 503 });
   const url = new URL(req.url);
   let body: any = {}; try { body = await req.json(); } catch { /* MP às vezes manda só query string */ }
   const id = String(body?.data?.id ?? url.searchParams.get("data.id") ?? url.searchParams.get("id") ?? "");
@@ -18,9 +18,12 @@ Deno.serve(async (req) => {
   const orderId = Number(p.external_reference);
   if (p.status === "approved" && orderId) {
     // confere valor para evitar pagamento parcial
-    const { data: o } = await admin.from("orders").select("valor_centavos,status").eq("id", orderId).single();
+    const { data: o, error: readError } = await admin.from("orders").select("valor_centavos,status").eq("id", orderId).maybeSingle();
+    if (readError) return new Response("retry", { status: 503 });
+    if (p.currency_id !== "BRL") return new Response("ok");
     if (o && o.status === "aguardando_pagamento" && Math.round(p.transaction_amount * 100) >= o.valor_centavos) {
-      await admin.from("orders").update({ status: "na_fila", pagamento_id: id }).eq("id", orderId).eq("status", "aguardando_pagamento");
+      const { error: writeError } = await admin.from("orders").update({ status: "na_fila", pagamento_id: id }).eq("id", orderId).eq("status", "aguardando_pagamento");
+      if (writeError) return new Response("retry", { status: 503 });
     }
   }
   return new Response("ok");
